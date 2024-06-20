@@ -254,4 +254,47 @@ router.put("/edit_referencia/:idFuncionario/:idRestaurante", (req, res) => {
   });
 });
 
+router.post("/add_ingrediente", (req, res) => {
+  const sql = "INSERT INTO ingrediente (`nome`) VALUES (?)";
+  con.query(sql, [req.body.nome], (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error" });
+    return res.json({ Status: true });
+  });
+});
+
+router.get("/ingrediente", (req, res) => {
+  const sql = "SELECT * FROM ingrediente";
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error" });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+router.get("/edit_ingrediente/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "SELECT * FROM ingrediente WHERE idIngrediente=?";
+  con.query(sql, id, (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error" });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+router.delete("/delete_ingrediente/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "DELETE from ingrediente WHERE idIngrediente= ?";
+  con.query(sql, id, (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error: " + err });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+router.put("/edit_ingrediente/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = `UPDATE ingrediente SET descricao=? WHERE idIngrediente=?`;
+  const values = [req.body.descricao, id];
+  con.query(sql, values, (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error" + err });
+    return res.json({ Status: true, Result: result });
+  });
+});
 export { router as adminRouter };
